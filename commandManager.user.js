@@ -9,8 +9,8 @@
 // @license         MIT
 // @icon            https://github.com/Chiwa42/discord-slash-command-manager/raw/main/images/icon.png
 // @match           https://discord.com/*
-// @updateURL       https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/blob/main/commandManager.meta.js
-// @downloadURL     https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/blob/main/commandManager.user.js
+// @updateURL       https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.meta.js
+// @downloadURL     https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.user.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @run-at       document-idle
