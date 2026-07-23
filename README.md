@@ -50,6 +50,30 @@ The panel can be dragged by its title bar.
 
 ---
 
+## Field Reference
+
+> [!CAUTION]
+> Your `Authorization` header value is your Discord user token. Do not share it.
+
+Open Discord Web, press `F12`, and use the `Network` tab to inspect requests.
+
+Connection settings:
+
+- `User Token`: select any `POST` request, such as typing status, sending a message, or using a slash command. Open `Headers` and copy the `Authorization` value.
+- `Guild ID`: use any slash command, wait until it is sent, find the `interactions` request, then check the request payload or parameters for `guild_id`.
+- `Channel ID`: from the same `interactions` request, use `channel_id`.
+- `Session ID`: from the same `interactions` request, use `session_id`.
+
+Command settings:
+
+- `App ID`: from the `interactions` request, use `application_id`.
+- `Cmd ID`: from the `interactions` request data, use `id`.
+- `Version`: from the `interactions` request data, use `version`.
+- `Interval (s)`: how many seconds to wait between automatic sends.
+- `Options JSON`: required only for commands that have required fields or options.
+
+---
+
 ## Command Options
 
 `Options JSON` should be a valid JSON array matching Discord's slash command option structure.

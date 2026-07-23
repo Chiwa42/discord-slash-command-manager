@@ -50,6 +50,30 @@ Discord Multi-Slash Command Manager 是一個瀏覽器 userscript，會在 Disco
 
 ---
 
+## 欄位說明
+
+> [!CAUTION]
+> `Authorization` header 的值就是你的 Discord user token。請不要分享給任何人。
+
+開啟 Discord Web，按下 `F12`，並使用 `Network` 分頁查看請求。
+
+連線設定：
+
+- `User Token`：選擇任一個 `POST` request，例如打字中狀態、傳送訊息，或使用 slash command。打開 `Headers`，複製 `Authorization` 的值。
+- `Guild ID`：使用任一個 slash command，確認送出後，找到 `interactions` request，並在 request payload 或 parameters 中找到 `guild_id`。
+- `Channel ID`：在同一個 `interactions` request 中使用 `channel_id`。
+- `Session ID`：在同一個 `interactions` request 中使用 `session_id`。
+
+指令設定：
+
+- `App ID`：在 `interactions` request 中使用 `application_id`。
+- `Cmd ID`：在 `interactions` request 的 data 中使用 `id`。
+- `Version`：在 `interactions` request 的 data 中使用 `version`。
+- `Interval (s)`：自動發送指令的間隔秒數。
+- `Options JSON`：只有在指令有必填欄位或 options 時需要填寫。
+
+---
+
 ## Command Options
 
 `Options JSON` 必須是有效的 JSON 陣列，並符合 Discord slash command options 的資料結構。
