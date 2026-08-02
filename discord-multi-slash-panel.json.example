@@ -1,0 +1,19 @@
+{
+  "token": "",
+  "guild": "",
+  "channel": "",
+  "sessionId": "",
+  "commands": [
+    {
+      "name": "example",
+      "applicationId": "",
+      "commandId": "",
+      "version": "",
+      "options": "[]",
+      "interval": 3600,
+      "enabled": true,
+      "sent": 0,
+      "lastSent": 0
+    }
+  ]
+}
