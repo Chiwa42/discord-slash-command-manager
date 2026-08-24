@@ -1,16 +1,14 @@
 // ==UserScript==
 // @name            Discord Multi-Slash Command Manager
-// @description     Auto send slash command interactions
+// @description     Auto send slash command interactions with random delay
 // @namespace       https://tampermonkey.net/
-// @version         1.1
-// @author          chiwa42 (https://github.com/Chiwa42)
+// @version         1.2
+// @author          chiwa42 (Modded)
 // @homepageURL     https://github.com/Chiwa42/discord-slash-command-manager
 // @supportURL      https://github.com/Chiwa42/discord-slash-command-manager/discussions
 // @license         MIT
 // @icon            https://chiwa42.github.io/discord-slash-command-manager/images/icon.png
 // @match           https://discord.com/*
-// @updateURL       https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.meta.js
-// @downloadURL     https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.user.js
 // @grant           GM_getValue
 // @grant           GM_setValue
 // @run-at          document-idle
@@ -131,12 +129,24 @@
             cfg.commands.forEach(async (cmd) => {
                 if (!cmd.enabled) return;
 
-                const intervalMs = Number(cmd.delay) * 1000;
+                // 初始化該指令的當前隨機誤差 (如果還沒有的話)
+                if (cmd._currentJitter === undefined) {
+                    cmd._currentJitter = Math.floor(Math.random() * (cmd.jitter || 0) * 1000);
+                }
+
+                // 計算這次目標需要的間隔 (基本秒數 + 隨機抽出的誤差秒數)
+                const intervalMs = (Number(cmd.delay) * 1000) + cmd._currentJitter;
                 const last = cmd.lastSent || 0;
 
                 if (now - last >= intervalMs) {
                     cmd.lastSent = now;
-                    log(`Triggering command: /${cmd.name} (Interval: ${cmd.delay}s)`);
+                    
+                    // 記錄觸發日誌，顯示這次加了多少隨機秒數
+                    log(`Triggering command: /${cmd.name} (Interval: ${cmd.delay}s + ${Math.round(cmd._currentJitter / 1000)}s)`);
+                    
+                    // 重新為下一次執行骰一個新的隨機誤差
+                    cmd._currentJitter = Math.floor(Math.random() * (cmd.jitter || 0) * 1000);
+                    
                     await sendInteraction(cmd);
                 }
             });
@@ -218,6 +228,9 @@
         }
 
         cfg.commands.forEach((cmd, index) => {
+            // Ensure old configs have jitter value
+            if (cmd.jitter === undefined) cmd.jitter = 30;
+
             const card = document.createElement("div");
             card.style.cssText = `
                 background: #2f3136;
@@ -251,6 +264,9 @@
                     <div>
                         Interval (s): <input class="cmd-delay" type="number" value="${cmd.delay || 3600}" style="width: 100%; box-sizing: border-box;">
                     </div>
+                    <div>
+                        Random + (s): <input class="cmd-jitter" type="number" value="${cmd.jitter}" style="width: 100%; box-sizing: border-box;">
+                    </div>
                 </div>
 
                 <div style="margin-top: 5px; font-size: 11px;">
@@ -270,6 +286,7 @@
             card.querySelector(".cmd-id").oninput = (e) => { cmd.commandId = e.target.value.trim(); save(); };
             card.querySelector(".cmd-ver").oninput = (e) => { cmd.version = e.target.value.trim(); save(); };
             card.querySelector(".cmd-delay").oninput = (e) => { cmd.delay = Number(e.target.value); save(); };
+            card.querySelector(".cmd-jitter").oninput = (e) => { cmd.jitter = Number(e.target.value); save(); };
             card.querySelector(".cmd-options").oninput = (e) => { cmd.options = e.target.value; save(); };
 
             card.querySelector(".cmd-send-now").onclick = () => sendInteraction(cmd);
@@ -319,6 +336,7 @@
                 version: "",
                 options: "[]",
                 delay: 3600,
+                jitter: 30, // 預設 30 秒隨機誤差
                 enabled: true,
                 sent: 0,
                 lastSent: 0

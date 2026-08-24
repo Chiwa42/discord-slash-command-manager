@@ -1,16 +1,14 @@
 // ==UserScript==
 // @name            Discord Multi-Slash Command Manager
-// @description     Auto send slash command interactions
+// @description     Auto send slash command interactions with random delay
 // @namespace       https://tampermonkey.net/
-// @version         1.1
-// @author          chiwa42 (https://github.com/Chiwa42)
+// @version         1.2
+// @author          chiwa42 (Modded)
 // @homepageURL     https://github.com/Chiwa42/discord-slash-command-manager
 // @supportURL      https://github.com/Chiwa42/discord-slash-command-manager/discussions
 // @license         MIT
 // @icon            https://chiwa42.github.io/discord-slash-command-manager/images/icon.png
 // @match           https://discord.com/*
-// @updateURL       https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.meta.js
-// @downloadURL     https://raw.githubusercontent.com/Chiwa42/discord-slash-command-manager/main/commandManager.user.js
 // @grant           GM_getValue
 // @grant           GM_setValue
 // @run-at          document-idle
