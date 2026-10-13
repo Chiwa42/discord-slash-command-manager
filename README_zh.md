@@ -26,6 +26,76 @@ Discord Multi-Slash Command Manager 是一個瀏覽器 userscript，會在 Disco
 
 ---
 
+## 使用 Node.js 在本機執行
+
+如果不想安裝瀏覽器 userscript 管理器，可以使用 Node.js 在本機執行
+command manager。本機版本使用與瀏覽器面板相同的設定欄位，但會從 JSON
+設定檔讀取資料。
+
+> [!WARNING]
+> 本機版本同樣會使用 Discord user token，並自動化使用者帳號的操作。
+> 這類行為可能被視為 self-bot，也可能違反 Discord 服務條款。使用風險
+> 由你自行承擔。
+
+### 前置需求
+
+- 安裝 [Node.js](https://nodejs.org/)。
+- 如果希望關閉命令提示字元後程式仍繼續執行，可選擇安裝
+  [PM2](https://pm2.keymetrics.io/)：
+
+```bash
+npm install -g pm2
+```
+
+### 設定本機版本
+
+1. 在專案目錄中複製 `discord-multi-slash-panel.json.example`。
+2. 將複製出的檔案重新命名為 `discord-multi-slash-panel.json`。
+3. 填入 JSON 設定值。欄位對應到瀏覽器面板中的設定：
+   - `token`：Discord user token
+   - `guild`：Guild ID
+   - `channel`：Channel ID
+   - `sessionId`：Session ID
+   - `commands`：Slash command 設定，包含 application ID、command ID、
+     version、options、執行間隔，以及是否啟用
+
+`options` 必須是以字串儲存的 JSON 陣列，例如 `"[]"`，或
+`"[{\"type\":3,\"name\":\"message\",\"value\":\"hello\"}]"`。
+
+請妥善保管 `discord-multi-slash-panel.json`。其中包含 Discord token，
+不要上傳或分享這個檔案。
+
+### 使用 Node.js 啟動
+
+在專案目錄中執行：
+
+```bash
+node commandManager.js
+```
+
+程式執行期間必須保持命令提示字元開啟。按下 `Ctrl+C` 可以停止程式。
+
+### 使用 PM2 啟動與管理
+
+使用以下指令啟動：
+
+```bash
+pm2 start commandManager.js
+```
+
+啟動後可以關閉命令提示字元，PM2 會讓程式繼續在背景執行。常用管理
+指令如下：
+
+```bash
+pm2 list
+pm2 restart <id>
+pm2 delete <id>
+```
+
+將 `<id>` 替換成 `pm2 list` 顯示的程序 ID。例如，
+`pm2 restart 0` 會重新啟動程序 `0`，而 `pm2 delete 0` 會將它從 PM2
+中移除。
+
 ## 使用方式
 
 1. 在瀏覽器中開啟 Discord。

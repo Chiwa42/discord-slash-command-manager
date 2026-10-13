@@ -26,6 +26,79 @@ This project is intended for personal experimentation and learning. You are resp
 
 ---
 
+## Local Node.js Usage
+
+If you do not want to install a browser userscript manager, you can run the
+command manager locally with Node.js. The local version uses the same
+configuration values as the browser panel, but reads them from a JSON file.
+
+> [!WARNING]
+> The local version also uses a Discord user token and automates actions from
+> a user account. This may be considered self-bot behavior and may violate
+> Discord's Terms of Service. Use it at your own risk.
+
+### Prerequisites
+
+- Install [Node.js](https://nodejs.org/).
+- Optional: install [PM2](https://pm2.keymetrics.io/) if you want the process
+  to keep running after closing the command prompt:
+
+```bash
+npm install -g pm2
+```
+
+### Configure the local version
+
+1. Make a copy of `discord-multi-slash-panel.json.example` in the project
+   directory.
+2. Rename the copy to `discord-multi-slash-panel.json`.
+3. Fill in the values in the JSON file. The fields correspond to the settings
+   in the browser panel:
+   - `token`: Discord user token
+   - `guild`: Guild ID
+   - `channel`: Channel ID
+   - `sessionId`: Session ID
+   - `commands`: Slash command definitions, including application ID, command
+     ID, version, options, interval, and whether the command is enabled
+
+`options` must be a JSON array stored as a string, for example `"[]"` or
+`"[{\"type\":3,\"name\":\"message\",\"value\":\"hello\"}]"`.
+
+Keep `discord-multi-slash-panel.json` private. It contains your Discord token
+and should not be uploaded or shared.
+
+### Start with Node.js
+
+From the project directory, run:
+
+```bash
+node commandManager.js
+```
+
+Keep the command prompt open while the process is running. Press `Ctrl+C` to
+stop it.
+
+### Start and manage with PM2
+
+Start the process with:
+
+```bash
+pm2 start commandManager.js
+```
+
+After starting it, you can close the command prompt and PM2 will continue
+running the process in the background. Use the following commands to manage
+it:
+
+```bash
+pm2 list
+pm2 restart <id>
+pm2 delete <id>
+```
+
+Replace `<id>` with the process ID shown by `pm2 list`. For example,
+`pm2 restart 0` restarts process `0`, and `pm2 delete 0` removes it from PM2.
+
 ## Usage
 
 1. Open Discord in the browser.
