@@ -10,7 +10,8 @@
       "commandId": "",
       "version": "",
       "options": "[]",
-      "interval": 3600,
+      "delay": 3600,
+      "jitter": 30,
       "enabled": true,
       "sent": 0,
       "lastSent": 0

@@ -59,7 +59,16 @@ npm install -g pm2
    - `channel`: Channel ID
    - `sessionId`: Session ID
    - `commands`: Slash command definitions, including application ID, command
-     ID, version, options, interval, and whether the command is enabled
+     ID, version, options, delay, random jitter, and whether the command is
+     enabled
+
+`delay` is the base interval in seconds. `jitter` is the maximum additional
+random delay in seconds; each execution waits for a random value between
+`0` and `jitter`. For example, `delay: 3600` and `jitter: 30` sends each
+command after approximately 3600 to 3630 seconds.
+
+For compatibility with older configuration files, `interval` can be used
+instead of `delay`.
 
 `options` must be a JSON array stored as a string, for example `"[]"` or
 `"[{\"type\":3,\"name\":\"message\",\"value\":\"hello\"}]"`.

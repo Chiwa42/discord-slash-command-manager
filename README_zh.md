@@ -57,7 +57,13 @@ npm install -g pm2
    - `channel`：Channel ID
    - `sessionId`：Session ID
    - `commands`：Slash command 設定，包含 application ID、command ID、
-     version、options、執行間隔，以及是否啟用
+     version、options、基本間隔、隨機誤差，以及是否啟用
+
+`delay` 是基本執行間隔，單位為秒。`jitter` 是額外隨機延遲的最大秒數；
+每次執行都會在 `0` 到 `jitter` 之間隨機選取延遲。例如 `delay: 3600`、
+`jitter: 30` 代表每次大約會等待 3600 到 3630 秒。
+
+為了相容舊版設定檔，如果沒有 `delay`，也可以使用 `interval`。
 
 `options` 必須是以字串儲存的 JSON 陣列，例如 `"[]"`，或
 `"[{\"type\":3,\"name\":\"message\",\"value\":\"hello\"}]"`。

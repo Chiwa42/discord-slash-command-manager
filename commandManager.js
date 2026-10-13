@@ -1,7 +1,5 @@
 const fs = require('fs');
 const https = require('https');
-const childProcess = require('child_process');
-
 const STORAGE = 'discord-multi-slash-panel.json';
 
 let cfg = {
@@ -86,14 +84,30 @@ function executeCommand(cmd) {
 
 // Main loop
 const lastExecuteTimes = {};
+const scheduledIntervals = {};
 setInterval(() => {
   // Check each command to see if it should be executed
   cfg.commands.forEach((cmd) => {
     if (cmd.enabled) {
       const now = Date.now();
-      if (!lastExecuteTimes[cmd.name] || now - lastExecuteTimes[cmd.name] >= cmd.interval * 1000) {
+      const delay = Number(cmd.delay ?? cmd.interval);
+      const jitter = Number(cmd.jitter || 0);
+
+      if (!Number.isFinite(delay) || delay < 0 || !Number.isFinite(jitter) || jitter < 0) {
+        console.error(`Invalid delay or jitter for command ${cmd.name}.`);
+        return;
+      }
+
+      if (scheduledIntervals[cmd.name] === undefined) {
+        scheduledIntervals[cmd.name] = delay + Math.random() * jitter;
+      }
+      const interval = scheduledIntervals[cmd.name];
+
+      if (!lastExecuteTimes[cmd.name] || now - lastExecuteTimes[cmd.name] >= interval * 1000) {
+        console.log(`Triggering command ${cmd.name} (delay: ${delay}s + random: ${Math.round(interval - delay)}s).`);
         executeCommand(cmd);
         lastExecuteTimes[cmd.name] = now;
+        delete scheduledIntervals[cmd.name];
         // Update lastSent and sent
         if (!cmd.lastSent) {
           cmd.lastSent = 0;
